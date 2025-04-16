@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2>Добавить новую локацию</h2>
+        <form method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="name" class="form-label">Название</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+                <div class="invalid-feedback">Пожалуйста, введите название локации.</div>
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label">Тип</label>
+                <select class="form-control" id="type" name="type" required>
+                    <option value="">Выберите тип</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback">Пожалуйста, выберите тип локации.</div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Описание</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                <div class="invalid-feedback">Пожалуйста, добавьте описание локации.</div>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Адрес</label>
+                <input type="text" class="form-control" id="address" name="address" required>
+                <div class="invalid-feedback">Пожалуйста, укажите адрес локации.</div>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Изображение</label>
+                <input type="file" class="form-control" id="image" name="image">
+            </div>
+            <!-- Кнопка отправки формы -->
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </form>
+    </div>
+{% endblock %}

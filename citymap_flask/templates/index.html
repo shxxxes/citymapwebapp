@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Локации</h2>
+        <div class="d-flex align-items-center">
+            <form method="GET" class="d-flex align-items-center me-3">
+                <label for="sort_by" class="me-2 mb-0">Сортировать по:</label>
+                <select name="sort_by" id="sort_by" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="newest" {% if request.args.get('sort_by') == 'newest' %}selected{% endif %}>По дате добавления (новые сначала)</option>
+                    <option value="oldest" {% if request.args.get('sort_by') == 'oldest' %}selected{% endif %}>По дате добавления (старые сначала)</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <!-- Кнопка добавления новой локации между сортировкой и локациями -->
+    <div class="text-center mb-4">
+        <a href="{{ url_for('add_location') }}" class="btn btn-success">Добавить новую локацию</a>
+    </div>
+
+    <div class="row">
+        {% for location in locations %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border border-dark rounded shadow-sm">
+                {% if location.image_path %}
+                <img src="{{ url_for('static', filename='uploads/' ~ location.image_path) }}"
+                     class="card-img-top object-fit-cover"
+                     alt="Изображение локации"
+                     style="height: 200px; object-fit: cover;">
+                {% else %}
+                <img src="{{ url_for('static', filename='default.jpg') }}"
+                     class="card-img-top object-fit-cover"
+                     alt="Нет изображения"
+                     style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ location.name }}</h5>
+                    <p class="card-text">{{ location.description }}</p>
+                    <a href="{{ url_for('location_info', location_id=location.id) }}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <!-- Заголовок и информация о локации -->
+        <h1 class="display-4">{{ location.name }}</h1>
+        <div class="border border-3 border-dark p-4 mb-4 rounded-5 shadow-lg">
+            <p><strong>Тип:</strong> {{ location.type }}</p>
+            <p><strong>Описание:</strong> {{ location.description }}</p>
+            <p><strong>Адрес:</strong> {{ location.address }}</p>
+        </div>
+
+        <!-- Изображение локации -->
+        {% if location.image_path %}
+            <div class="mb-4 border border-3 border-dark p-4 rounded-5 shadow-lg">
+                <img src="{{ url_for('static', filename='uploads/' + location.image_path) }}" alt="Image of {{ location.name }}" class="img-fluid rounded-5">
+            </div>
+        {% endif %}
+
+        <hr>
+
+        <!-- Отзывы -->
+        <h3 class="mt-4">Отзывы</h3>
+        <div class="list-group mb-4">
+            {% for review in reviews %}
+                <div class="list-group-item border border-3 border-dark p-4 rounded-3 shadow-lg mb-3">
+                    <strong>{{ review.user_name }}</strong> ({{ review.rating }} / 5)
+                    <p>{{ review.review_text }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Форма для добавления отзыва -->
+        {% if 'username' in session %}
+            <h4>Добавить отзыв</h4>
+            <form action="{{ url_for('location_info', location_id=location.id) }}" method="POST">
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Оценка (1-5)</label>
+                    <input type="number" id="rating" name="rating" class="form-control" min="1" max="5" required>
+                </div>
+                <div class="mb-3">
+                    <label for="review_text" class="form-label">Отзыв</label>
+                    <textarea id="review_text" name="review_text" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Добавить отзыв</button>
+            </form>
+        {% else %}
+            <p class="text-muted mt-3">Чтобы оставить отзыв, необходимо <a href="{{ url_for('login') }}">войти</a>.</p>
+        {% endif %}
+    </div>
+{% endblock %}
